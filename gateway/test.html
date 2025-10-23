@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservice Gateway Test</title>
+</head>
+<body>
+    <h2>Register User</h2>
+    <form id="userForm">
+        Username: <input type="text" id="username" required><br>
+        Email: <input type="email" id="email" required><br>
+        <button type="submit">Register</button>
+    </form>
+    <p id="userResponse"></p>
+
+    <h2>Create Order</h2>
+    <form id="orderForm">
+        Username: <input type="text" id="orderUsername" required><br>
+        Item: <input type="text" id="item" required><br>
+        <button type="submit">Create Order</button>
+    </form>
+    <p id="orderResponse"></p>
+
+    <script>
+        const userForm = document.getElementById("userForm");
+        const orderForm = document.getElementById("orderForm");
+
+        userForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+
+            const res = await fetch("http://127.0.0.1:8000/register", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({username, email})
+            });
+
+            const data = await res.json();
+            document.getElementById("userResponse").innerText = JSON.stringify(data);
+        });
+
+        orderForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("orderUsername").value;
+            const item = document.getElementById("item").value;
+
+            const res = await fetch("http://127.0.0.1:8000/create_order", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({username, item})
+            });
+
+            const data = await res.json();
+            document.getElementById("orderResponse").innerText = JSON.stringify(data);
+        });
+    </script>
+</body>
+</html>
